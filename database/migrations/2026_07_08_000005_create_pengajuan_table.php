@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('kode_pengajuan')->unique();
             $table->foreignId('penerima_id')->constrained('penerima')->onDelete('cascade');
             $table->foreignId('petugas_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->date('tanggal_pengajuan');
+            $table->date('tanggal_pengajuan')->index();
             $table->string('status')->index();
             $table->text('keterangan')->nullable();
             $table->softDeletes();

@@ -1,59 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Informasi Pengajuan Bantuan Sosial (Bansos)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi berbasis web untuk mengelola proses pengajuan bantuan sosial mulai dari pendaftaran, survei lapangan, verifikasi administrasi, persetujuan pimpinan, hingga penyaluran bantuan. Sistem ini juga dilengkapi dengan halaman *landing page* yang dapat diakses oleh masyarakat umum untuk mengecek status pengajuan bantuan berdasarkan NIK.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentication & Authorization**: Akses berbasis peran (Super Admin, Admin, Petugas, Pimpinan).
+- **Master Data**: Pengelolaan data jenis bantuan, pengguna, dan data penduduk penerima bantuan.
+- **Pengajuan Bantuan**: Pendaftaran pengajuan bantuan oleh Petugas.
+- **Survei Lapangan**: Input data survei, upload foto kondisi rumah (tampak depan, ruang tamu, dapur, kamar, dll), serta dokumen pendukung.
+- **Verifikasi & Persetujuan**: Alur kerja bertingkat (menunggu verifikasi -> menunggu persetujuan -> siap disalurkan -> selesai) yang melibatkan Petugas, Admin, dan Pimpinan.
+- **Penyaluran Bantuan**: Upload bukti penyerahan bantuan (foto) kepada penerima.
+- **Laporan & Statistik**: Dashboard analitik dan laporan (PDF/Excel) untuk Pengajuan dan Penyaluran.
+- **Audit Log**: Pencatatan riwayat aktivitas pengguna untuk keamanan dan transparansi.
+- **Portal Publik (Landing Page)**: Informasi layanan dan cek status pengajuan (menggunakan NIK).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 11
+- **Database**: SQLite (untuk mempermudah setup) atau MySQL/PostgreSQL
+- **Frontend**: Blade Templating Engine dengan Bootstrap 5
+- **Testing**: PHPUnit
 
-## Learning Laravel
+## Prasyarat (Requirements)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP >= 8.2
+- Composer
+- Node.js & npm (untuk mem-build asset frontend dengan Vite)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Instalasi & Setup
 
-## Laravel Sponsors
+1. **Clone repositori ini atau download source code-nya.**
+   ```bash
+   git clone <url-repo>
+   cd Sembako
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Install dependensi PHP dan Node.js.**
+   ```bash
+   composer install
+   npm install
+   ```
 
-### Premium Partners
+3. **Konfigurasi Environment.**
+   Copy file `.env.example` menjadi `.env`.
+   ```bash
+   cp .env.example .env
+   ```
+   Atur koneksi database (secara default sudah dikonfigurasi menggunakan SQLite) dan parameter lain jika diperlukan.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Generate Application Key.**
+   ```bash
+   php artisan key:generate
+   ```
 
-## Contributing
+5. **Jalankan Migrasi dan Seeder (Untuk Data Dummy).**
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+   > **Perhatian**: Menjalankan `--seed` akan memasukkan data dummy (termasuk Demo Seeder) minimal 20 records (penerima, pengajuan, penyaluran, dll) sehingga aplikasi siap didemokan.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Tautkan Storage (Storage Link).**
+   Jalankan perintah ini agar file upload (foto, bukti dokumen) dapat diakses via browser.
+   ```bash
+   php artisan storage:link
+   ```
 
-## Code of Conduct
+7. **Build Asset Vite & Jalankan Server Lokal.**
+   Buka dua tab terminal, jalankan secara bersamaan:
+   ```bash
+   npm run build
+   php artisan serve
+   ```
+   
+   Aplikasi kini dapat diakses melalui browser pada alamat:
+   [http://localhost:8000](http://localhost:8000)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Akun Demo (Seeder)
 
-## Security Vulnerabilities
+Gunakan akun berikut untuk mencoba alur bisnis aplikasi:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Role | Email | Password | Hak Akses |
+| --- | --- | --- | --- |
+| **Super Admin** | `superadmin@bansos.test` | `password` | Mengelola semua data pengguna, master data, dan laporan. |
+| **Admin** | `admin@bansos.test` | `password` | Verifikasi pengajuan, kelola master data (Penerima & Jenis Bantuan), lihat laporan. |
+| **Pimpinan** | `pimpinan@bansos.test` | `password` | Persetujuan akhir (setujui/tolak) pengajuan bantuan dan lihat laporan. |
+| **Petugas** | `petugas@bansos.test` | `password` | Entri pengajuan, isi survei lapangan, dan lakukan penyaluran. |
 
-## License
+> Terdapat juga akun petugas lapangan lain: `petugas1@bansos.test` hingga `petugas5@bansos.test` (password: `password`).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Alur Bisnis Pengajuan Bantuan
+
+1. **Pengajuan (Oleh Petugas):** Petugas membuat pengajuan baru berdasarkan NIK penerima (Status: *Menunggu Survei*).
+2. **Survei Lapangan (Oleh Petugas):** Petugas mendatangi rumah penerima, mengisi kuesioner dan mengupload bukti foto (Status: *Menunggu Verifikasi*).
+3. **Verifikasi (Oleh Admin):** Admin memverifikasi data dan foto. Admin dapat menyetujui, meminta revisi survei, atau menolak. Jika disetujui, status menjadi *Menunggu Persetujuan*.
+4. **Persetujuan (Oleh Pimpinan):** Pimpinan memberikan keputusan akhir. Jika disetujui, status menjadi *Siap Disalurkan*.
+5. **Penyaluran (Oleh Petugas):** Petugas menyerahkan bantuan dan mengupload foto bukti terima (Status: *Selesai*).
+6. **Masyarakat (Landing Page):** Penerima manfaat dapat melihat riwayat proses ini dengan menginputkan NIK mereka.
+
+## Testing
+
+Aplikasi ini dilengkapi dengan pengujian (Feature Testing) untuk memastikan semua fitur berjalan normal (Total ~60+ test passed).
+
+Jalankan pengujian dengan perintah:
+```bash
+php artisan test
+```
+
+## Keamanan
+
+- **CSRF Protection**: Aktif di seluruh form POST/PUT/DELETE.
+- **File Validation**: Ekstensi dan ukuran file divalidasi dengan ketat di form request (hanya gambar & PDF).
+- **Authorization**: Diatur secara terpusat di `FormRequest::authorize()` dan Controller (`auth()->user()->role`).
+- **Audit Log**: Seluruh CRUD utama dicatat dalam tabel `log_aktivitas` untuk pemantauan sistem.
+
+---
+*Dokumentasi disusun untuk proses finalisasi TAHAP 15.*

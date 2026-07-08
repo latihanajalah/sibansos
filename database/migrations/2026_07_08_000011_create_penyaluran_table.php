@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pengajuan_id')->constrained('pengajuan')->onDelete('cascade');
             $table->foreignId('petugas_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->date('tanggal');
+            $table->date('tanggal')->index();
             $table->string('status');
             $table->text('catatan')->nullable();
             $table->timestamps();
