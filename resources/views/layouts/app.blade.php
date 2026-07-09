@@ -7,6 +7,11 @@
 
     <title>{{ config('app.name', 'Bansos Dashboard') }}</title>
 
+    <!-- Favicon -->
+     <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('logo.png') }}?v=2">
+
     <!-- Google Fonts (Outfit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

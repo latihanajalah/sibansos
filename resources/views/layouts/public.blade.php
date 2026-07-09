@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+     <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('logo.png') }}?v=2">
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@yield('meta_description', 'Sistem Informasi Pengajuan Bantuan Sosial – cek status bantuan sosial Anda secara online.')">
