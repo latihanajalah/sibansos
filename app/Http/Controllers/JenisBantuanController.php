@@ -48,6 +48,8 @@ class JenisBantuanController extends Controller
         ActivityLogger::log("Tambah Jenis Bantuan: {$jenisBantuan->nama_bantuan} ({$jenisBantuan->kode})");
 
         if ($request->wantsJson() || $request->ajax()) {
+            // also flash success into session so a reload shows the top flash alert
+            session()->flash('success', 'Jenis bantuan berhasil ditambahkan.');
             return response()->json([
                 'message' => 'Jenis bantuan berhasil ditambahkan.',
                 'data' => $jenisBantuan,
@@ -84,6 +86,8 @@ class JenisBantuanController extends Controller
         ActivityLogger::log("Edit Jenis Bantuan: {$jenisBantuan->nama_bantuan} ({$jenisBantuan->kode})");
 
         if ($request->wantsJson() || $request->ajax()) {
+            // also flash success into session so a reload shows the top flash alert
+            session()->flash('success', 'Jenis bantuan berhasil diperbarui.');
             return response()->json([
                 'message' => 'Jenis bantuan berhasil diperbarui.',
                 'data' => $jenisBantuan,

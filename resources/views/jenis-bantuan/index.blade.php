@@ -590,17 +590,14 @@
 
             bsModalForm.hide();
             await Swal.fire({
-                toast: true,
-                position: 'top-end',
                 icon: 'success',
                 title: mode === 'edit' ? 'Perubahan disimpan!' : 'Data berhasil ditambahkan!',
+                showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
-                showConfirmButton: false,
-                customClass: {
-                    popup: 'shadow border border-white',
-                }
+                position: 'center',
             });
+            try { sessionStorage.setItem('skipFlashSwal', '1'); } catch (e) {}
             window.location.reload();
 
         } catch (err) {

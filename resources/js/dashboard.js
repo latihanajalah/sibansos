@@ -1,3 +1,32 @@
+window.showSuccessToast = function (message) {
+    if (window.Swal) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: message,
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'shadow border border-white',
+            },
+        });
+        return;
+    }
+
+    const tempAlert = document.createElement('div');
+    tempAlert.className = 'alert alert-success border-0 shadow-sm d-flex align-items-center gap-2 mb-4';
+    tempAlert.style.position = 'fixed';
+    tempAlert.style.top = '1rem';
+    tempAlert.style.right = '1rem';
+    tempAlert.style.zIndex = '1050';
+    tempAlert.innerHTML = `<i class="bi bi-check-circle-fill fs-5"></i><div>${message}</div>`;
+
+    document.body.appendChild(tempAlert);
+    setTimeout(() => tempAlert.remove(), 3000);
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sb-sidebar-toggle');
     const sidebar = document.getElementById('sb-sidebar');
