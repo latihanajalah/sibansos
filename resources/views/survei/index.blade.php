@@ -115,14 +115,45 @@
             </div>
 
             {{-- Status Filter --}}
-            <div class="col-md-3">
-                <label class="form-label">Status Pengajuan</label>
-                <select name="status" class="form-select">
-                    <option value="">-- Semua Status --</option>
-                    <option value="menunggu_verifikasi" {{ request('status') === 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                    <option value="disetujui"           {{ request('status') === 'disetujui'           ? 'selected' : '' }}>Disetujui</option>
-                    <option value="ditolak"             {{ request('status') === 'ditolak'             ? 'selected' : '' }}>Ditolak</option>
-                </select>
+            <div class="col-md-6">
+                <label class="form-label d-block mb-2">Status Pengajuan</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="status" id="status-all" value="" 
+                               {{ request('status') === '' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="status-all">
+                            <span class="badge bg-secondary">Semua</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="status" id="status-menunggu" value="menunggu_verifikasi"
+                               {{ request('status') === 'menunggu_verifikasi' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="status-menunggu">
+                            <span class="badge" style="background:#dbeafe;color:#2563eb;"><i class="bi bi-hourglass-split"></i> Menunggu Verifikasi</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="status" id="status-disetujui" value="disetujui"
+                               {{ request('status') === 'disetujui' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="status-disetujui">
+                            <span class="badge" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-check-circle-fill"></i> Disetujui</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="status" id="status-ditolak" value="ditolak"
+                               {{ request('status') === 'ditolak' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="status-ditolak">
+                            <span class="badge" style="background:#fee2e2;color:#dc2626;"><i class="bi bi-x-circle-fill"></i> Ditolak</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="status" id="status-revisi" value="revisi_survei"
+                               {{ request('status') === 'revisi_survei' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="status-revisi">
+                            <span class="badge" style="background:#fef3c7;color:#d97706;"><i class="bi bi-arrow-repeat"></i> Revisi Survei</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
             {{-- Start Date --}}
@@ -132,7 +163,7 @@
             </div>
 
             {{-- End Date --}}
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="form-label">Tanggal Selesai</label>
                 <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
             </div>
@@ -184,6 +215,10 @@
                                 <span class="status-badge" style="background:#dbeafe;color:#2563eb;">
                                     <i class="bi bi-hourglass-split"></i> Menunggu Verifikasi
                                 </span>
+                            @elseif($status === 'revisi_survei')
+                                <span class="status-badge" style="background:#fef3c7;color:#d97706;">
+                                    <i class="bi bi-arrow-repeat"></i> Revisi Survei
+                                </span>
                             @elseif($status === 'disetujui')
                                 <span class="status-badge" style="background:#dcfce7;color:#16a34a;">
                                     <i class="bi bi-check-circle-fill"></i> Disetujui
@@ -208,10 +243,10 @@
                                 </a>
                                 @if(auth()->user()->role === 'petugas'
                                     && $survei->pengajuan->petugas_id === auth()->id()
-                                    && $survei->pengajuan->status === 'menunggu_verifikasi')
+                                    && in_array($survei->pengajuan->status, ['menunggu_verifikasi', 'revisi_survei']))
                                     <a href="{{ route('survei.edit', $survei) }}"
                                        class="btn btn-sm btn-icon-action btn-outline-primary"
-                                       title="Edit">
+                                       title="Revisi">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                 @endif

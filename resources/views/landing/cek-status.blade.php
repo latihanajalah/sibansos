@@ -597,7 +597,7 @@ use App\Helpers\StatusHelper;
                                         </span>
                                         <input
                                             type="text"
-                                            class="form-control form-control-lg @error('nik') is-invalid @enderror"
+                                            class="form-control form-control-lg only-number @error('nik') is-invalid @enderror"
                                             id="nik"
                                             name="nik"
                                             placeholder="Contoh: 3275XXXXXXXXXXXX"

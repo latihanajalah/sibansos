@@ -1063,7 +1063,7 @@
                                 type="text"
                                 name="nik"
                                 id="nik-hero"
-                                class="form-control"
+                                class="form-control only-number"
                                 placeholder="Masukkan NIK 16 digit..."
                                 maxlength="16"
                                 inputmode="numeric"

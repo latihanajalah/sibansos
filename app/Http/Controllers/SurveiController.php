@@ -252,8 +252,9 @@ class SurveiController extends Controller
     public function update(UpdateSurveiRequest $request, Survei $survei)
     {
         $pengajuan = $survei->pengajuan;
+        $statusChanged = false;
 
-        DB::transaction(function () use ($request, $survei, $pengajuan) {
+        DB::transaction(function () use ($request, $survei, $pengajuan, &$statusChanged) {
             // 1. Update data survei
             $survei->update([
                 'status_rumah'      => $request->status_rumah,
@@ -319,12 +320,29 @@ class SurveiController extends Controller
                     }
                 }
             }
+
+            if ($pengajuan->status === 'revisi_survei') {
+                $pengajuan->update(['status' => 'menunggu_verifikasi']);
+                $statusChanged = true;
+
+                RiwayatStatus::create([
+                    'pengajuan_id' => $pengajuan->id,
+                    'user_id'      => auth()->id(),
+                    'status'       => 'menunggu_verifikasi',
+                    'catatan'      => 'Survei direvisi dan dikirim ulang untuk verifikasi.',
+                ]);
+            }
         });
 
         ActivityLogger::log("Edit Survei: {$pengajuan->kode_pengajuan}");
 
+        $message = 'Data survei berhasil diperbarui.';
+        if ($statusChanged) {
+            $message = 'Data survei berhasil diperbarui. Status pengajuan diperbarui menjadi Menunggu Verifikasi.';
+        }
+
         return redirect()->route('survei.show', $survei)
-            ->with('success', 'Data survei berhasil diperbarui.');
+            ->with('success', $message);
     }
 
     /**

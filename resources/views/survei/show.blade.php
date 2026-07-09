@@ -11,9 +11,9 @@
     <div class="d-flex gap-2">
         @if(auth()->user()->role === 'petugas'
             && $survei->pengajuan->petugas_id === auth()->id()
-            && $survei->pengajuan->status === 'menunggu_verifikasi')
+            && in_array($survei->pengajuan->status, ['menunggu_verifikasi', 'revisi_survei']))
             <a href="{{ route('survei.edit', $survei) }}" class="btn btn-primary d-flex align-items-center gap-2">
-                <i class="bi bi-pencil"></i> Edit Survei
+                <i class="bi bi-pencil"></i> {{ $survei->pengajuan->status === 'revisi_survei' ? 'Revisi Survei' : 'Edit Survei' }}
             </a>
         @endif
         <a href="{{ route('survei.index') }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">

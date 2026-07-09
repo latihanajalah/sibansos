@@ -5,7 +5,7 @@
 <div class="mb-3">
     <label for="nama" class="form-label fw-medium">Nama Lengkap <span class="text-danger">*</span></label>
     <input type="text"
-           class="form-control @error('nama') is-invalid @enderror"
+            class="form-control only-text @error('nama') is-invalid @enderror"
            id="nama"
            name="nama"
            value="{{ old('nama', $user->nama ?? '') }}"
@@ -35,8 +35,8 @@
     <label for="no_hp" class="form-label fw-medium">Nomor HP <span class="text-danger">*</span></label>
     <div class="input-group">
         <span class="input-group-text"><i class="bi bi-phone"></i></span>
-        <input type="text"
-               class="form-control @error('no_hp') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-number @error('no_hp') is-invalid @enderror"
                id="no_hp"
                name="no_hp"
                value="{{ old('no_hp', $user->no_hp ?? '') }}"

@@ -20,7 +20,7 @@
     <i class="bi bi-exclamation-triangle-fill text-warning fs-5 mt-1"></i>
     <div>
         <strong>Perhatian</strong><br>
-        <span class="small">Survei hanya dapat diubah selama status pengajuan masih <strong>Menunggu Verifikasi</strong>. Setelah diverifikasi, data tidak dapat diubah.</span>
+        <span class="small">Survei dapat diubah ketika status pengajuan masih <strong>Menunggu Verifikasi</strong> atau <strong>Revisi Survei</strong>. Setelah diverifikasi final, data tidak dapat diubah.</span>
     </div>
 </div>
 

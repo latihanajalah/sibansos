@@ -8,8 +8,8 @@
 <div class="row g-3 mb-4">
     <div class="col-md-6">
         <label for="nik" class="form-label fw-medium">NIK <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('nik') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-number @error('nik') is-invalid @enderror"
                id="nik"
                name="nik"
                value="{{ old('nik', $penerima->nik ?? '') }}"
@@ -23,8 +23,8 @@
 
     <div class="col-md-6">
         <label for="no_kk" class="form-label fw-medium">Nomor KK <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('no_kk') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-number @error('no_kk') is-invalid @enderror"
                id="no_kk"
                name="no_kk"
                value="{{ old('no_kk', $penerima->no_kk ?? '') }}"
@@ -37,8 +37,8 @@
 
     <div class="col-md-6">
         <label for="nama" class="form-label fw-medium">Nama Lengkap <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('nama') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-text @error('nama') is-invalid @enderror"
                id="nama"
                name="nama"
                value="{{ old('nama', $penerima->nama ?? '') }}"
@@ -62,8 +62,8 @@
 
     <div class="col-md-6">
         <label for="tempat_lahir" class="form-label fw-medium">Tempat Lahir <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('tempat_lahir') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-text @error('tempat_lahir') is-invalid @enderror"
                id="tempat_lahir"
                name="tempat_lahir"
                value="{{ old('tempat_lahir', $penerima->tempat_lahir ?? '') }}"
@@ -105,8 +105,8 @@
 
     <div class="col-md-6">
         <label for="rt" class="form-label fw-medium">RT <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('rt') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-number @error('rt') is-invalid @enderror"
                id="rt"
                name="rt"
                value="{{ old('rt', $penerima->rt ?? '') }}"
@@ -118,8 +118,8 @@
 
     <div class="col-md-6">
         <label for="rw" class="form-label fw-medium">RW <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('rw') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-number @error('rw') is-invalid @enderror"
                id="rw"
                name="rw"
                value="{{ old('rw', $penerima->rw ?? '') }}"
@@ -131,8 +131,8 @@
 
     <div class="col-md-6">
         <label for="desa" class="form-label fw-medium">Desa / Kelurahan <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('desa') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-text @error('desa') is-invalid @enderror"
                id="desa"
                name="desa"
                value="{{ old('desa', $penerima->desa ?? '') }}"
@@ -144,8 +144,8 @@
 
     <div class="col-md-6">
         <label for="kecamatan" class="form-label fw-medium">Kecamatan <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('kecamatan') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-text @error('kecamatan') is-invalid @enderror"
                id="kecamatan"
                name="kecamatan"
                value="{{ old('kecamatan', $penerima->kecamatan ?? '') }}"
@@ -157,8 +157,8 @@
 
     <div class="col-md-6">
         <label for="kabupaten" class="form-label fw-medium">Kabupaten / Kota <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('kabupaten') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-text @error('kabupaten') is-invalid @enderror"
                id="kabupaten"
                name="kabupaten"
                value="{{ old('kabupaten', $penerima->kabupaten ?? '') }}"
@@ -170,8 +170,8 @@
 
     <div class="col-md-6">
         <label for="provinsi" class="form-label fw-medium">Provinsi <span class="text-danger">*</span></label>
-        <input type="text"
-               class="form-control @error('provinsi') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-text @error('provinsi') is-invalid @enderror"
                id="provinsi"
                name="provinsi"
                value="{{ old('provinsi', $penerima->provinsi ?? '') }}"
@@ -189,8 +189,8 @@
 <div class="row g-3 mb-4">
     <div class="col-md-6">
         <label for="no_hp" class="form-label fw-medium">Nomor HP</label>
-        <input type="text"
-               class="form-control @error('no_hp') is-invalid @enderror"
+         <input type="text"
+             class="form-control only-number @error('no_hp') is-invalid @enderror"
                id="no_hp"
                name="no_hp"
                value="{{ old('no_hp', $penerima->no_hp ?? '') }}"

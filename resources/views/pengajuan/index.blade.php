@@ -174,23 +174,13 @@
                         </td>
                         <td class="text-muted small">{{ $pengajuan->petugas->nama ?? 'N/A' }}</td>
                         <td>
-                            @if($pengajuan->status === 'menunggu_survei')
-                                <span class="status-badge" style="background:#fef3c7;color:#d97706;">
-                                    <i class="bi bi-hourglass-split"></i> Menunggu Survei
-                                </span>
-                            @elseif($pengajuan->status === 'disetujui')
-                                <span class="status-badge" style="background:#dcfce7;color:#16a34a;">
-                                    <i class="bi bi-check-circle-fill"></i> Disetujui
-                                </span>
-                            @elseif($pengajuan->status === 'ditolak')
-                                <span class="status-badge" style="background:#fee2e2;color:#dc2626;">
-                                    <i class="bi bi-x-circle-fill"></i> Ditolak
-                                </span>
-                            @else
-                                <span class="status-badge text-capitalize" style="background:#f1f5f9;color:#64748b;">
-                                    {{ str_replace('_', ' ', $pengajuan->status) }}
-                                </span>
-                            @endif
+                            @php
+                                [$statusLabel, $statusColor, $statusIcon] = \App\Helpers\StatusHelper::label($pengajuan->status);
+                                $statusText = in_array($statusColor, ['warning', 'light']) ? 'dark' : 'white';
+                            @endphp
+                            <span class="status-badge badge bg-{{ $statusColor }} text-{{ $statusText }}">
+                                <i class="bi {{ $statusIcon }}"></i> {{ $statusLabel }}
+                            </span>
                         </td>
                         <td class="text-muted small">{{ $pengajuan->tanggal_pengajuan->format('d M Y') }}</td>
                         <td>

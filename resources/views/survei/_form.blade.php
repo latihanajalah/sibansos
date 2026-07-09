@@ -131,10 +131,10 @@
         <div class="col-md-3">
             <label for="penghasilan" class="form-label fw-medium">Penghasilan / Bulan <span class="text-danger">*</span></label>
             <div class="input-group">
-                <span class="input-group-text bg-white">Rp</span>
-                <input type="number" class="form-control @error('penghasilan') is-invalid @enderror"
-                       id="penghasilan" name="penghasilan" min="0"
-                       value="{{ old('penghasilan', $survei->penghasilan ?? '') }}"
+                <span class="input-group-text bg-white" id="penghasilan-display">Rp</span>
+                <input type="text" class="form-control format-currency @error('penghasilan') is-invalid @enderror"
+                       id="penghasilan" name="penghasilan" inputmode="numeric"
+                       value="{{ old('penghasilan', isset($survei) ? intval($survei->penghasilan) : '') }}"
                        placeholder="0">
             </div>
             @error('penghasilan') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror

@@ -11,6 +11,26 @@ class StoreSurveiRequest extends FormRequest
         return auth()->user()->role === 'petugas';
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('penghasilan')) {
+            $this->merge([
+                'penghasilan' => $this->normalizeCurrencyValue($this->input('penghasilan')),
+            ]);
+        }
+    }
+
+    private function normalizeCurrencyValue($value): string
+    {
+        $raw = preg_replace('/[^\d.]/', '', (string) $value);
+
+        if (preg_match('/\.(\d{2})$/', $raw)) {
+            $raw = preg_replace('/\.(\d{2})$/', '', $raw);
+        }
+
+        return preg_replace('/\D/', '', $raw);
+    }
+
     public function rules(): array
     {
         return [
