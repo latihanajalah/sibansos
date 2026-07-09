@@ -16,7 +16,7 @@
 <x-breadcrumb :items="['Master Data Penerima' => route('penerima.index'), 'Tambah Penerima' => '#']" />
 
 <div class="row justify-content-center">
-    <div class="col-lg-9">
+    <div class="col-lg-full">
         <div class="card card-saas border-0 p-4">
             <h5 class="fw-semibold text-dark mb-4 d-flex align-items-center gap-2">
                 <i class="bi bi-person-plus text-primary"></i> Data Penerima Baru

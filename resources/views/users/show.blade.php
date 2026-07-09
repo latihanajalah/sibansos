@@ -21,7 +21,7 @@
 <x-breadcrumb :items="['Manajemen User' => route('users.index'), 'Detail User' => '#']" />
 
 <div class="row justify-content-center">
-    <div class="col-lg-7">
+    <div class="col-lg-full">
         <div class="card card-saas border-0 overflow-hidden">
             {{-- Profile Header Band --}}
             <div class="p-4 d-flex align-items-center gap-4" style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);">

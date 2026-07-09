@@ -47,6 +47,13 @@ class JenisBantuanController extends Controller
 
         ActivityLogger::log("Tambah Jenis Bantuan: {$jenisBantuan->nama_bantuan} ({$jenisBantuan->kode})");
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'message' => 'Jenis bantuan berhasil ditambahkan.',
+                'data' => $jenisBantuan,
+            ], 201);
+        }
+
         return redirect()->route('jenis-bantuan.index')
             ->with('success', 'Jenis bantuan berhasil ditambahkan.');
     }
@@ -75,6 +82,13 @@ class JenisBantuanController extends Controller
         $jenisBantuan->update($request->validated());
 
         ActivityLogger::log("Edit Jenis Bantuan: {$jenisBantuan->nama_bantuan} ({$jenisBantuan->kode})");
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'message' => 'Jenis bantuan berhasil diperbarui.',
+                'data' => $jenisBantuan,
+            ], 200);
+        }
 
         return redirect()->route('jenis-bantuan.index')
             ->with('success', 'Jenis bantuan berhasil diperbarui.');
