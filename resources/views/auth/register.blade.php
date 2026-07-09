@@ -1,52 +1,14 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-
-        <!-- Nama -->
-        <div>
-            <x-input-label for="nama" :value="__('Nama')" />
-            <x-text-input id="nama" class="block mt-1 w-full" type="text" name="nama" :value="old('nama')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+    <div style="text-align: center; padding: 3rem 1rem;">
+        <div style="margin-bottom: 2rem;">
+            <i class="bi bi-info-circle" style="font-size: 3rem; color: #DC2626;"></i>
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;">Pendaftaran Tidak Tersedia</h2>
+        <p style="color: #6B7280; margin-bottom: 2rem; line-height: 1.5;">
+            Sistem ini tidak memiliki fitur pendaftaran publik. Silakan hubungi administrator untuk membuat akun.
+        </p>
+        <a href="{{ route('login') }}" style="display: inline-block; background: #DC2626; color: white; padding: 0.875rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#991B1B'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#DC2626'; this.style.transform='translateY(0)';">
+            Kembali ke Login
+        </a>
+    </div>
 </x-guest-layout>

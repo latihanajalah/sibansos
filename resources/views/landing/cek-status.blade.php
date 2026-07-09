@@ -2,101 +2,383 @@
 
 @section('title', 'Cek Status Bantuan')
 @section('meta_description', 'Cek status pengajuan bantuan sosial berdasarkan NIK Anda. Lihat riwayat proses, jenis bantuan, dan unduh bukti penyaluran.')
+@section('hide_navbar', true)
+@section('hide_footer', true)
 
 @push('styles')
 <style>
-    /* ─── Page Hero ─────────────────────────────────── */
-    .cek-hero {
-        background: linear-gradient(135deg, #1e3a8a 0%, #2563EB 55%, #7c3aed 100%);
-        padding: 4rem 0 3rem;
+    .cek-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background:
+            linear-gradient(115deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 48%, rgba(236,253,245,0.72) 100%),
+            repeating-linear-gradient(135deg, rgba(8,145,178,0.07) 0 1px, transparent 1px 18px),
+            linear-gradient(135deg, #f8fafc 0%, #eef6ff 50%, #ecfeff 100%);
+        border-bottom: 1px solid var(--border);
         position: relative;
         overflow: hidden;
     }
+
+    .cek-page::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(90deg, rgba(30,64,175,0.08), transparent 30%, transparent 70%, rgba(8,145,178,0.08)),
+            linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.72) 100%);
+        pointer-events: none;
+    }
+
+    .cek-hero {
+        min-height: 620px;
+        display: flex;
+        align-items: center;
+        padding: 4.5rem 0;
+        position: relative;
+        background: transparent;
+    }
+
     .cek-hero::before {
         content: '';
         position: absolute;
-        width: 500px; height: 500px;
-        background: radial-gradient(circle, rgba(255,255,255,.06), transparent 70%);
-        top: -180px; right: -100px;
-        border-radius: 50%;
+        width: 520px;
+        height: 520px;
+        background: linear-gradient(135deg, rgba(8,145,178,0.08), rgba(30,64,175,0.02));
+        top: -210px;
+        right: -150px;
+        border-radius: 42px;
+        transform: rotate(18deg);
+        pointer-events: none;
     }
 
-    /* ─── Search Card ────────────────────────────────── */
-    .search-card {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.12);
-        padding: 2.5rem;
-        margin-top: -2rem;
-        position: relative;
-        z-index: 10;
+    .cek-hero::after {
+        content: '';
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        background: linear-gradient(135deg, rgba(30,64,175,0.08), rgba(8,145,178,0.02));
+        bottom: -70px;
+        left: -90px;
+        border-radius: 38px;
+        transform: rotate(-16deg);
+        pointer-events: none;
     }
 
-    /* ─── Status Badge ───────────────────────────────── */
-    .status-badge-lg {
-        font-size: .85rem;
-        font-weight: 700;
-        padding: .5rem 1.2rem;
-        border-radius: 50px;
-        letter-spacing: .03em;
+    .cek-badge {
         display: inline-flex;
         align-items: center;
-        gap: .4rem;
+        gap: .5rem;
+        background: var(--accent-light);
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+        padding: .55rem 1.05rem;
+        border-radius: 50px;
+        font-size: .78rem;
+        font-weight: 700;
+        margin-bottom: 1.35rem;
+        font-family: 'Poppins', sans-serif;
     }
 
-    /* ─── Info Cards ─────────────────────────────────── */
+    .cek-title {
+        font-size: clamp(2.1rem, 4vw, 3.2rem);
+        font-weight: 800;
+        line-height: 1.15;
+        color: var(--text-main);
+        margin-bottom: 1rem;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .cek-title span {
+        color: var(--accent);
+        display: block;
+    }
+
+    .cek-subtitle {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.8;
+        max-width: 560px;
+        margin-bottom: 1.75rem;
+    }
+
+    .cek-mini-list {
+        display: grid;
+        gap: .8rem;
+        max-width: 520px;
+    }
+
+    .cek-mini-item {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        color: var(--text-muted);
+        font-size: .9rem;
+        font-weight: 500;
+    }
+
+    .cek-mini-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: #eff6ff;
+        color: var(--primary);
+        border: 1px solid #dbeafe;
+    }
+
+    .search-card {
+        background: linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%);
+        border-radius: 28px;
+        padding: 2.75rem 2.25rem;
+        color: #fff;
+        box-shadow: 0 24px 70px rgba(30, 64, 175, 0.22), 0 0 1px rgba(0, 0, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 10;
+        transform: rotateX(5deg) rotateY(-8deg) translateZ(0);
+        transform-style: preserve-3d;
+        transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .search-card::before {
+        content: '';
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+        top: -140px;
+        right: -140px;
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    .search-card::after {
+        content: '';
+        position: absolute;
+        inset: 1px;
+        border-radius: 27px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 38%, rgba(255,255,255,0.06));
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .search-card-stage {
+        position: relative;
+        perspective: 1100px;
+        padding: 1.25rem 0 1.25rem 1.25rem;
+    }
+
+    .search-card-stage::before,
+    .search-card-stage::after {
+        content: '';
+        position: absolute;
+        border-radius: 28px;
+        pointer-events: none;
+    }
+
+    .search-card-stage::before {
+        inset: 2.3rem -1.25rem .25rem 2.7rem;
+        background: linear-gradient(135deg, rgba(8,145,178,0.42), rgba(30,64,175,0.08));
+        transform: rotateX(5deg) rotateY(-8deg) translateZ(-42px);
+        filter: blur(.2px);
+        opacity: .8;
+    }
+
+    .search-card-stage::after {
+        width: 72%;
+        height: 36px;
+        left: 20%;
+        bottom: -.2rem;
+        background: rgba(30,64,175,0.24);
+        filter: blur(24px);
+    }
+
+    .search-card-stage:hover .search-card {
+        transform: rotateX(2deg) rotateY(-3deg) translateY(-4px);
+        box-shadow: 0 30px 80px rgba(30, 64, 175, 0.28), 0 0 1px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-card > * {
+        position: relative;
+        z-index: 2;
+    }
+
+    .search-card-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        background: rgba(255,255,255,0.14);
+        border: 1px solid rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.92);
+        padding: .45rem .7rem;
+        border-radius: 12px;
+        font-size: .75rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    .search-card h5 {
+        font-weight: 700;
+        color: #fff;
+        font-size: 1.2rem;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .search-card p {
+        color: rgba(255, 255, 255, 0.84) !important;
+    }
+
+    .search-card .form-label {
+        color: rgba(255, 255, 255, 0.96);
+    }
+
+    .search-card .form-text {
+        color: rgba(255, 255, 255, 0.74);
+    }
+
+    .search-card .input-group {
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+        background: #fff;
+    }
+
+    .search-card .input-group-text { background: #fff !important; border: none !important; padding: 0 1rem !important; }
+    .search-card .input-group-text i { color: var(--primary); font-size: 1.1rem; }
+    .search-card input { border: none !important; padding: .9rem 1rem !important; font-size: .95rem; color: var(--text-main); }
+    .search-card input::placeholder { color: #94a3b8; letter-spacing: 0; }
+    .search-card input:focus { box-shadow: none; }
+    .search-card button { background: #2563eb !important; color:#fff !important; font-weight:700; border:none !important; padding:.9rem 1.2rem !important; transition: all .3s; }
+    .search-card button:hover { background: #1d4ed8 !important; transform: translateY(-2px); }
+
+    .search-card .btn, .btn.btn-primary {
+        background: var(--primary);
+        color: #fff !important;
+        border: none !important;
+        padding: .75rem 1.4rem !important;
+        border-radius: 12px;
+        font-weight: 700;
+        box-shadow: 0 6px 18px rgba(30,64,175,0.15);
+    }
+
+    .btn.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+    .cek-content {
+        padding: 3rem 0 5rem;
+        background: var(--bg-subtle);
+        position: relative;
+    }
+
     .info-card {
         background: #fff;
         border: 1.5px solid var(--border);
-        border-radius: 16px;
+        border-radius: 18px;
         overflow: hidden;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
     }
+
     .info-card-header {
-        background: var(--bg-subtle);
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
         border-bottom: 1.5px solid var(--border);
-        padding: 1rem 1.5rem;
+        padding: 1.05rem 1.25rem;
         display: flex;
+        gap: .75rem;
         align-items: center;
-        gap: .65rem;
     }
+
     .info-card-header .card-icon {
-        width: 36px; height: 36px;
-        border-radius: 10px;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1rem;
+        font-size: 1.05rem;
+        flex-shrink: 0;
     }
+
     .info-card-header h5 {
         margin: 0;
-        font-weight: 700;
         font-size: .95rem;
+        font-weight: 800;
+        color: var(--text-main);
+        font-family: 'Poppins', sans-serif;
     }
-    .info-card-body { padding: 1.5rem; }
+
+    .info-card-body { padding: 1.25rem; }
+
     .info-row {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
         gap: 1rem;
-        padding: .55rem 0;
+        padding: .65rem 0;
         border-bottom: 1px solid #f1f5f9;
-        font-size: .875rem;
+        font-size: .88rem;
     }
-    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .info-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
     .info-row-label {
         color: var(--text-muted);
-        font-weight: 500;
+        font-weight: 600;
         flex-shrink: 0;
         min-width: 140px;
     }
+
     .info-row-value {
-        font-weight: 600;
         color: var(--text-main);
+        font-weight: 700;
         text-align: right;
     }
 
-    /* ─── Timeline ───────────────────────────────────── */
-    .timeline { position: relative; padding-left: 2rem; }
+    .status-banner {
+        border-radius: 18px;
+        padding: 1.35rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+    }
+
+    .status-banner .banner-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        flex-shrink: 0;
+    }
+
+    .bantuan-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        background: #eff6ff;
+        border: 1.5px solid #bfdbfe;
+        color: #1d4ed8;
+        padding: .5rem .85rem;
+        border-radius: 50px;
+        font-size: .78rem;
+        font-weight: 800;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
     .timeline::before {
         content: '';
         position: absolute;
@@ -104,134 +386,139 @@
         top: 0;
         bottom: 0;
         width: 2px;
-        background: linear-gradient(to bottom, #2563EB, #e2e8f0);
+        background: linear-gradient(to bottom, var(--primary), #e2e8f0);
         border-radius: 2px;
     }
+
     .tl-item {
         position: relative;
-        padding-bottom: 1.75rem;
+        padding-bottom: 1.65rem;
     }
+
     .tl-item:last-child { padding-bottom: 0; }
+
     .tl-dot {
         position: absolute;
         left: -2rem;
         top: 2px;
-        width: 20px; height: 20px;
-        background: #2563EB;
+        width: 22px;
+        height: 22px;
+        background: var(--primary);
         border: 3px solid #fff;
         border-radius: 50%;
-        box-shadow: 0 0 0 2px #2563EB;
+        box-shadow: 0 0 0 2px var(--primary);
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    .tl-item:last-child .tl-dot {
-        background: #10b981;
-        box-shadow: 0 0 0 2px #10b981;
-    }
-    .tl-dot i { font-size: .55rem; color: #fff; }
+
+    .tl-item:last-child .tl-dot { background:#10b981; box-shadow:0 0 0 2px #10b981; }
+    .tl-dot i { font-size:.62rem; color:#fff; }
+
     .tl-date {
-        font-size: .72rem;
-        font-weight: 700;
         color: var(--text-muted);
+        font-size: .74rem;
+        font-weight: 800;
+        letter-spacing: .04em;
         text-transform: uppercase;
-        letter-spacing: .06em;
-        margin-bottom: .3rem;
+        margin-bottom: .45rem;
     }
+
     .tl-content {
         background: var(--bg-subtle);
         border: 1.5px solid var(--border);
         border-radius: 12px;
         padding: .9rem 1.1rem;
     }
+
     .tl-status {
-        font-weight: 700;
-        font-size: .875rem;
-        margin-bottom: .2rem;
+        font-weight: 800;
+        font-size: .86rem;
     }
+
     .tl-catatan {
-        font-size: .8rem;
         color: var(--text-muted);
-        line-height: 1.5;
-        margin: 0;
+        font-size: .83rem;
+        line-height: 1.6;
+        margin-bottom: 0;
     }
 
-    /* ─── Bantuan Pill ───────────────────────────────── */
-    .bantuan-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: .5rem;
-        background: #eff6ff;
-        border: 1.5px solid #bfdbfe;
-        color: #1d4ed8;
-        padding: .5rem 1rem;
-        border-radius: 50px;
-        font-size: .8rem;
-        font-weight: 700;
-    }
-
-    /* ─── Bukti Download ─────────────────────────────── */
-    .bukti-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem 1.25rem;
-        background: var(--bg-subtle);
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        transition: all .2s;
-    }
-    .bukti-item:hover {
-        border-color: var(--primary);
-        background: var(--primary-light);
-    }
-    .bukti-icon {
-        width: 42px; height: 42px;
-        background: #dbeafe;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        color: #2563EB;
-        flex-shrink: 0;
-    }
-    .bukti-name { font-weight: 600; font-size: .875rem; margin-bottom: .1rem; }
-    .bukti-type { font-size: .75rem; color: var(--text-muted); }
-
-    /* ─── Empty State ────────────────────────────────── */
     .empty-state {
         text-align: center;
         padding: 4rem 2rem;
     }
+
     .empty-icon {
-        width: 80px; height: 80px;
+        width: 82px;
+        height: 82px;
         background: #fee2e2;
-        border-radius: 50%;
+        border-radius: 24px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-size: 2rem;
-        color: #ef4444;
-        margin-bottom: 1.5rem;
+        color: #dc2626;
+        margin-bottom: 1.25rem;
     }
 
-    /* ─── Alert Banner ───────────────────────────────── */
-    .status-banner {
-        border-radius: 16px;
-        padding: 1.5rem;
-        display: flex;
+    .bukti-item { display:flex; align-items:center; gap:1rem; padding:1rem; background:var(--bg-subtle); border:1.5px solid var(--border); border-radius:12px }
+    .bukti-icon { width:44px;height:44px;border-radius:10px;background:#dbeafe; display:flex; align-items:center; justify-content:center; color:var(--primary); }
+    .bukti-name { font-weight: 800; font-size: .86rem; color: var(--text-main); }
+    .bukti-type { color: var(--text-muted); font-size: .75rem; font-weight: 600; }
+
+    .back-link {
+        display: inline-flex;
         align-items: center;
-        gap: 1rem;
+        gap: .4rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: .875rem;
+        font-weight: 700;
+        transition: color .2s;
     }
-    .status-banner .banner-icon {
-        width: 52px; height: 52px;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-        flex-shrink: 0;
+
+    .back-link:hover {
+        color: var(--accent);
+    }
+
+    @media (max-width:768px) {
+        .cek-page {
+            align-items: flex-start;
+        }
+
+        .cek-hero {
+            min-height: auto;
+            padding: 2.5rem 0 2rem;
+        }
+
+        .search-card {
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-top: 1.25rem;
+            transform: none;
+        }
+
+        .search-card-stage {
+            padding: 0;
+        }
+
+        .search-card-stage::before,
+        .search-card-stage::after {
+            display: none;
+        }
+
+        .cek-content {
+            padding: 2rem 0 4rem;
+        }
+
+        .info-row {
+            flex-direction: column;
+            gap: .2rem;
+        }
+
+        .info-row-value {
+            text-align: left;
+        }
     }
 </style>
 @endpush
@@ -243,67 +530,110 @@ use App\Helpers\StatusHelper;
 @endphp
 
 {{-- ─── Page Hero ─── --}}
-<section class="cek-hero">
-    <div class="container position-relative" style="z-index:1;">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb mb-0" style="font-size:.8rem;">
-                <li class="breadcrumb-item"><a href="{{ route('landing') }}" class="text-white-50 text-decoration-none">Beranda</a></li>
-                <li class="breadcrumb-item active text-white">Cek Status Bantuan</li>
-            </ol>
-        </nav>
-        <h1 class="text-white fw-800 mb-1" style="font-weight:800;font-size:1.8rem;">Cek Status Bantuan</h1>
-        <p class="text-white-50 mb-0" style="font-size:.95rem;">Masukkan NIK 16 digit untuk melihat status pengajuan bantuan sosial Anda.</p>
+<section class="cek-page">
+    <div class="container">
+        <div class="cek-hero">
+            <div class="row align-items-center justify-content-center g-5 position-relative" style="z-index:1;">
+                <div class="col-lg-5">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb mb-0" style="font-size:.82rem;">
+                            <li class="breadcrumb-item"><a href="{{ route('landing') }}" class="text-muted text-decoration-none">Beranda</a></li>
+                            <li class="breadcrumb-item active" style="color:var(--accent);">Cek Status Bantuan</li>
+                        </ol>
+                    </nav>
+
+                    <div class="cek-badge">
+                        <i class="bi bi-shield-check"></i>
+                        SiBansos
+                    </div>
+                    <h1 class="cek-title">
+                        Cek Status
+                        <span>Bantuan Sosial</span>
+                    </h1>
+                    <p class="cek-subtitle">
+                        Masukkan NIK 16 digit untuk melihat perkembangan pengajuan, status verifikasi, dan informasi penyaluran bantuan.
+                    </p>
+
+                    <div class="cek-mini-list">
+                        <div class="cek-mini-item">
+                            <span class="cek-mini-icon"><i class="bi bi-search"></i></span>
+                            <span>Pencarian cepat berdasarkan data kependudukan yang terdaftar.</span>
+                        </div>
+                        <div class="cek-mini-item">
+                            <span class="cek-mini-icon"><i class="bi bi-clock-history"></i></span>
+                            <span>Riwayat proses ditampilkan jelas setelah data ditemukan.</span>
+                        </div>
+                        <div class="cek-mini-item">
+                            <span class="cek-mini-icon"><i class="bi bi-lock"></i></span>
+                            <span>NIK ditampilkan secara aman pada hasil pencarian.</span>
+                        </div>
+                    </div>
+
+                    @if(!isset($searched) || !$searched)
+                    <div class="mt-4">
+                        <a href="{{ route('landing') }}" class="back-link">
+                            <i class="bi bi-arrow-left"></i>Kembali ke Beranda
+                        </a>
+                    </div>
+                    @endif
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="search-card-stage">
+                        <div class="search-card">
+                            <div class="search-card-chip">
+                                <i class="bi bi-shield-lock"></i>
+                                Pencarian Aman
+                            </div>
+                            <h5 class="mb-1">Pencarian Status Bantuan</h5>
+                            <p class="mb-4" style="font-size:.875rem;">Data akan ditampilkan sesuai dengan NIK yang terdaftar dalam sistem.</p>
+
+                            <form action="{{ route('status') }}" method="GET" id="form-cek-status">
+                                <div class="mb-3">
+                                    <label for="nik" class="form-label fw-600 small" style="font-weight:700;">NIK (Nomor Induk Kependudukan)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="bi bi-credit-card-2-front"></i>
+                                        </span>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-lg @error('nik') is-invalid @enderror"
+                                            id="nik"
+                                            name="nik"
+                                            placeholder="Contoh: 3275XXXXXXXXXXXX"
+                                            value="{{ old('nik', $nik ?? '') }}"
+                                            maxlength="16"
+                                            inputmode="numeric"
+                                            autocomplete="off"
+                                            style="font-size:1rem;letter-spacing:.08em;"
+                                        >
+                                        @error('nik')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-text mt-2">
+                                        <i class="bi bi-info-circle me-1"></i>NIK harus terdiri dari 16 digit angka sesuai KTP.
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 fw-700" style="font-weight:700;border-radius:12px;font-size:.95rem;" id="btn-cek">
+                                    <i class="bi bi-search me-2"></i>Cek Status
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
+@if(isset($searched) && $searched)
 {{-- ─── Main Content ─── --}}
-<section style="padding:2rem 0 5rem;background:var(--bg-subtle);">
+<section class="cek-content">
     <div class="container">
 
-        {{-- Search Card --}}
-        <div class="search-card mb-4">
-            <h5 class="fw-700 mb-1" style="font-weight:700;">Pencarian Status Bantuan</h5>
-            <p class="text-muted mb-4" style="font-size:.875rem;">Data akan ditampilkan sesuai dengan NIK yang terdaftar dalam sistem.</p>
-
-            <form action="{{ route('status') }}" method="GET" id="form-cek-status">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-8 col-lg-9">
-                        <label for="nik" class="form-label fw-600 small" style="font-weight:600;">NIK (Nomor Induk Kependudukan)</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-credit-card-2-front text-primary"></i>
-                            </span>
-                            <input
-                                type="text"
-                                class="form-control form-control-lg py-3 @error('nik') is-invalid @enderror"
-                                id="nik"
-                                name="nik"
-                                placeholder="Contoh: 3275XXXXXXXXXXXX"
-                                value="{{ old('nik', $nik ?? '') }}"
-                                maxlength="16"
-                                inputmode="numeric"
-                                autocomplete="off"
-                                style="font-size:1rem;letter-spacing:.08em;"
-                            >
-                            @error('nik')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-text mt-1">
-                            <i class="bi bi-info-circle me-1"></i>NIK harus terdiri dari 16 digit angka sesuai KTP.
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-lg-3">
-                        <button type="submit" class="btn btn-primary w-100 py-3 fw-700" style="font-weight:700;border-radius:10px;font-size:.95rem;" id="btn-cek">
-                            <i class="bi bi-search me-2"></i>Cek Status
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
         {{-- ─── Hasil Pencarian ─── --}}
-        @if(isset($searched) && $searched)
 
             {{-- TIDAK DITEMUKAN --}}
             @if(is_null($penerima) || is_null($pengajuan ?? null))
@@ -622,19 +952,9 @@ use App\Helpers\StatusHelper;
             </div>
             @endif
 
-        @endif
-
-        {{-- Back to landing jika belum search --}}
-        @if(!isset($searched) || !$searched)
-        <div class="text-center mt-4">
-            <a href="{{ route('landing') }}" class="text-muted text-decoration-none small">
-                <i class="bi bi-arrow-left me-1"></i>Kembali ke Beranda
-            </a>
-        </div>
-        @endif
-
     </div>
 </section>
+@endif
 
 @endsection
 

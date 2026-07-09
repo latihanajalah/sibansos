@@ -1,20 +1,26 @@
 :root {
-    --sb-font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --sb-bg-body: #f9fafb;
-    --sb-bg-surface: #ffffff;
+    --sb-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --sb-bg-body: #F9FAFB;
+    --sb-bg-surface: #FFFFFF;
     --sb-text-main: #111827;
-    --sb-text-muted: #6b7280;
-    --sb-primary: #3b82f6;
-    --sb-primary-hover: #2563eb;
-    --sb-primary-light: #eff6ff;
-    --sb-border-color: #f3f4f6;
-    --sb-sidebar-width: 260px;
-    --sb-sidebar-collapsed-width: 70px;
-    --sb-header-height: 64px;
-    --sb-border-radius: 8px;
+    --sb-text-muted: #6B7280;
+    --sb-primary: #DC2626;
+    --sb-primary-dark: #991B1B;
+    --sb-primary-hover: #B91C1C;
+    --sb-primary-light: #FEE2E2;
+    --sb-border-color: #E5E7EB;
+    --sb-sidebar-width: 280px;
+    --sb-sidebar-collapsed-width: 80px;
+    --sb-header-height: 70px;
+    --sb-border-radius: 12px;
     --sb-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --sb-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025);
-    --sb-transition: all 0.25s ease-in-out;
+    --sb-shadow-md: 0 4px 12px 0 rgba(220, 38, 38, 0.1);
+    --sb-shadow-lg: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
+    --sb-transition: all 0.3s ease-in-out;
+    --sb-success: #10B981;
+    --sb-warning: #F59E0B;
+    --sb-danger: #EF4444;
+    --sb-info: #3B82F6;
 }
 
 body {
@@ -132,28 +138,34 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.65rem 0.75rem;
+    padding: 0.75rem 1rem;
     color: var(--sb-text-muted);
     text-decoration: none;
     border-radius: var(--sb-border-radius);
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     transition: var(--sb-transition);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid transparent;
 }
 
 .sb-menu-item:hover {
-    background-color: var(--sb-border-color);
-    color: var(--sb-text-main);
+    background-color: var(--sb-primary-light);
+    color: var(--sb-primary);
+    border-left-color: var(--sb-primary);
 }
 
 .sb-menu-item.active {
     background-color: var(--sb-primary-light);
     color: var(--sb-primary);
+    border-left-color: var(--sb-primary);
+    font-weight: 600;
 }
 
 .sb-menu-item i {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
 }
 
 #sb-sidebar.collapsed .sb-menu-item span {

@@ -1,8 +1,8 @@
 <aside id="sb-sidebar">
     <!-- Brand / Header -->
-    <a href="{{ route('dashboard') }}" class="sb-sidebar-brand">
-        <i class="bi bi-gift-fill text-primary fs-3"></i>
-        <span>Bansos App</span>
+    <a href="{{ route('dashboard') }}" class="sb-sidebar-brand" style="border-bottom: 2px solid #FEE2E2; background: linear-gradient(135deg, #FEE2E2 0%, rgba(254, 226, 226, 0.5) 100%);">
+        <i class="bi bi-gift-fill" style="color: #DC2626; font-size: 1.5rem;"></i>
+        <span style="color: #DC2626; font-weight: 800;">Sembako</span>
     </a>
 
     <!-- Sidebar Navigation Menu -->
