@@ -1,20 +1,17 @@
 #!/bin/bash
 set -e
 
-echo "Caching Laravel..."
+echo "Storage link..."
+php artisan storage:link || true
 
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-echo "Running migration..."
-
+echo "Migrating database..."
 php artisan migrate --force || true
 
-echo "Starting PHP-FPM..."
+echo "Optimizing Laravel..."
+php artisan optimize
 
+echo "Starting PHP-FPM..."
 php-fpm -D
 
 echo "Starting Nginx..."
-
 exec nginx -g "daemon off;"
