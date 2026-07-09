@@ -1,14 +1,67 @@
 @extends('layouts.app')
 
+@section('title', 'Survei Lapangan')
+
+@push('css')
+<style>
+    /* ─── Table Card ─────────────────────────────── */
+    .survei-table-card {
+        background: #fff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .survei-table thead tr th {
+        background: #f8fafc;
+        font-size: .72rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        font-weight: 700;
+        color: #64748b;
+        padding: .9rem 1.25rem;
+        border-bottom: 1.5px solid #eef1f5;
+        white-space: nowrap;
+    }
+    .survei-table tbody tr td {
+        padding: .85rem 1.25rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .survei-table tbody tr:last-child td { border-bottom: none; }
+    .survei-table tbody tr { transition: background .15s; }
+    .survei-table tbody tr:hover { background: #f8fafc; }
+
+    .status-badge {
+        font-size: .72rem;
+        font-weight: 600;
+        padding: .32rem .7rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+        white-space: nowrap;
+    }
+
+    .btn-icon-action {
+        width: 34px; height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        padding: 0;
+    }
+</style>
+@endpush
+
 @section('content')
 
 <x-breadcrumb :items="['Survei Lapangan' => '#']" />
 
 {{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-    <div>
-        <h2 class="fw-bold text-dark mb-1">Survei Lapangan</h2>
-        <p class="text-muted mb-0">Daftar hasil survei lapangan pengajuan bantuan sosial.</p>
+<div class="page-header mb-4">
+    <div class="page-header-content">
+        <h2>Survei Lapangan</h2>
+        <p>Daftar hasil survei lapangan pengajuan bantuan sosial.</p>
     </div>
 </div>
 
@@ -45,12 +98,12 @@
 @endif
 
 {{-- Filters Card --}}
-<div class="card card-saas border-0 p-4 mb-4">
+<div class="filter-card mb-4">
     <form method="GET" action="{{ route('survei.index') }}">
-        <div class="row g-3">
+        <div class="row g-3 align-items-end">
             {{-- Search --}}
             <div class="col-md-4">
-                <label class="form-label small fw-medium text-muted">Cari Survei</label>
+                <label class="form-label">Cari Survei</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white border-end-0">
                         <i class="bi bi-search text-muted"></i>
@@ -63,7 +116,7 @@
 
             {{-- Status Filter --}}
             <div class="col-md-3">
-                <label class="form-label small fw-medium text-muted">Status Pengajuan</label>
+                <label class="form-label">Status Pengajuan</label>
                 <select name="status" class="form-select">
                     <option value="">-- Semua Status --</option>
                     <option value="menunggu_verifikasi" {{ request('status') === 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
@@ -74,40 +127,46 @@
 
             {{-- Start Date --}}
             <div class="col-md-2">
-                <label class="form-label small fw-medium text-muted">Tanggal Mulai</label>
+                <label class="form-label">Tanggal Mulai</label>
                 <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
             </div>
 
             {{-- End Date --}}
-            <div class="col-md-2">
-                <label class="form-label small fw-medium text-muted">Tanggal Selesai</label>
+            <div class="col-md-3">
+                <label class="form-label">Tanggal Selesai</label>
                 <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
             </div>
 
             {{-- Actions --}}
-            <div class="col-12 d-flex gap-2 justify-content-end mt-1">
-                @if(request()->anyFilled(['search', 'status', 'start_date', 'end_date']))
-                    <a href="{{ route('survei.index') }}" class="btn btn-outline-secondary px-4">Reset Filter</a>
-                @endif
-                <button type="submit" class="btn btn-primary px-4">Terapkan Filter</button>
+            <div class="col-12">
+                <div class="filter-actions">
+                    @if(request()->anyFilled(['search', 'status', 'start_date', 'end_date']))
+                        <a href="{{ route('survei.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg me-1"></i> Reset
+                        </a>
+                    @endif
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search me-1"></i> Terapkan Filter
+                    </button>
+                </div>
             </div>
         </div>
     </form>
 </div>
 
 {{-- Table Card --}}
-<div class="card card-saas border-0 p-4">
+<div class="survei-table-card">
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table survei-table align-middle mb-0">
             <thead>
-                <tr class="text-muted small" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em;">
+                <tr>
                     <th style="width: 48px;">#</th>
                     <th>Kode Pengajuan</th>
                     <th>Nama Penerima</th>
                     <th>Petugas</th>
                     <th>Status Pengajuan</th>
                     <th>Tanggal Survei</th>
-                    <th class="text-center" style="width: 100px;">Aksi</th>
+                    <th class="text-center" style="width: 120px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,27 +181,37 @@
                         <td>
                             @php $status = $survei->pengajuan->status ?? '' @endphp
                             @if($status === 'menunggu_verifikasi')
-                                <span class="badge bg-info-subtle text-info">Menunggu Verifikasi</span>
+                                <span class="status-badge" style="background:#dbeafe;color:#2563eb;">
+                                    <i class="bi bi-hourglass-split"></i> Menunggu Verifikasi
+                                </span>
                             @elseif($status === 'disetujui')
-                                <span class="badge bg-success-subtle text-success">Disetujui</span>
+                                <span class="status-badge" style="background:#dcfce7;color:#16a34a;">
+                                    <i class="bi bi-check-circle-fill"></i> Disetujui
+                                </span>
                             @elseif($status === 'ditolak')
-                                <span class="badge bg-danger-subtle text-danger">Ditolak</span>
+                                <span class="status-badge" style="background:#fee2e2;color:#dc2626;">
+                                    <i class="bi bi-x-circle-fill"></i> Ditolak
+                                </span>
                             @else
-                                <span class="badge bg-secondary-subtle text-secondary text-capitalize">{{ str_replace('_', ' ', $status) }}</span>
+                                <span class="status-badge text-capitalize" style="background:#f1f5f9;color:#64748b;">
+                                    {{ str_replace('_', ' ', $status) }}
+                                </span>
                             @endif
                         </td>
                         <td class="text-muted small">{{ $survei->created_at->format('d M Y') }}</td>
                         <td>
-                            <div class="d-flex justify-content-center gap-1">
+                            <div class="d-flex justify-content-center gap-2">
                                 <a href="{{ route('survei.show', $survei) }}"
-                                   class="btn btn-sm btn-outline-secondary px-2 py-1" title="Detail">
+                                   class="btn btn-sm btn-icon-action btn-outline-secondary"
+                                   title="Detail">
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 @if(auth()->user()->role === 'petugas'
                                     && $survei->pengajuan->petugas_id === auth()->id()
                                     && $survei->pengajuan->status === 'menunggu_verifikasi')
                                     <a href="{{ route('survei.edit', $survei) }}"
-                                       class="btn btn-sm btn-outline-primary px-2 py-1" title="Edit">
+                                       class="btn btn-sm btn-icon-action btn-outline-primary"
+                                       title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                 @endif
@@ -165,11 +234,13 @@
 
     {{-- Pagination --}}
     @if($surveiList->hasPages())
-        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
-            <p class="text-muted small mb-0">
-                Menampilkan {{ $surveiList->firstItem() }}–{{ $surveiList->lastItem() }} dari {{ $surveiList->total() }} survei
-            </p>
-            {{ $surveiList->links('pagination::bootstrap-5') }}
+        <div class="px-4 py-3 border-top">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <p class="text-muted small mb-0">
+                    Menampilkan {{ $surveiList->firstItem() }}–{{ $surveiList->lastItem() }} dari {{ $surveiList->total() }} survei
+                </p>
+                {{ $surveiList->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     @endif
 </div>

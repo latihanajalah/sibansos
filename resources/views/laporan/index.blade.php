@@ -2,31 +2,8 @@
 
 @section('title', 'Statistik & Laporan')
 
-@push('styles')
+@push('css')
 <style>
-    /* ─── Stat Cards ─────────────────────────────── */
-    .stat-card {
-        border-radius: 16px;
-        padding: 1.4rem 1.5rem;
-        border: 1.5px solid var(--border-color, #e2e8f0);
-        background: #fff;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        transition: transform .2s, box-shadow .2s;
-        height: 100%;
-    }
-    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.08); }
-    .stat-icon {
-        width: 52px; height: 52px;
-        border-radius: 14px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.3rem;
-        flex-shrink: 0;
-    }
-    .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; margin-bottom: .15rem; }
-    .stat-label { font-size: .78rem; color: #64748b; font-weight: 500; }
-
     /* ─── Chart Cards ────────────────────────────── */
     .chart-card {
         background: #fff;
@@ -51,45 +28,79 @@
 
 <x-breadcrumb :items="['Laporan & Statistik' => '#']" />
 
-<div class="d-flex align-items-center justify-content-between mb-4">
-    <div>
-        <h4 class="fw-800 mb-0" style="font-weight:800;">Statistik & Laporan</h4>
-        <p class="text-muted mb-0 small">Ringkasan data dan grafik pengajuan bantuan sosial.</p>
+<div class="page-header mb-4">
+    <div class="page-header-content">
+        <h2>Statistik & Laporan</h2>
+        <p>Ringkasan data dan grafik pengajuan bantuan sosial.</p>
     </div>
-    <div class="d-flex gap-2 flex-wrap">
-        <a href="{{ route('laporan.pengajuan') }}" class="btn btn-outline-primary btn-sm" style="border-radius:8px;">
+    <div class="page-header-actions">
+        <a href="{{ route('laporan.pengajuan') }}" class="btn btn-outline-primary btn-sm">
             <i class="bi bi-file-earmark-text me-1"></i>Laporan Pengajuan
         </a>
-        <a href="{{ route('laporan.penyaluran') }}" class="btn btn-outline-success btn-sm" style="border-radius:8px;">
+        <a href="{{ route('laporan.penyaluran') }}" class="btn btn-outline-success btn-sm">
             <i class="bi bi-truck me-1"></i>Laporan Penyaluran
         </a>
     </div>
 </div>
 
 {{-- ─── Stat Cards ─── --}}
-<div class="row g-3 mb-4">
-    @php
-    $cards = [
-        ['label'=>'Total Penerima',       'value'=>$stats['total_penerima'],       'icon'=>'bi-people-fill',             'bg'=>'#dbeafe','ic'=>'#2563eb'],
-        ['label'=>'Total Pengajuan',       'value'=>$stats['total_pengajuan'],       'icon'=>'bi-file-earmark-text-fill',  'bg'=>'#ede9fe','ic'=>'#7c3aed'],
-        ['label'=>'Menunggu Survei',       'value'=>$stats['menunggu_survei'],       'icon'=>'bi-hourglass-split',         'bg'=>'#fef3c7','ic'=>'#d97706'],
-        ['label'=>'Menunggu Verifikasi',   'value'=>$stats['menunggu_verifikasi'],   'icon'=>'bi-shield-exclamation',      'bg'=>'#e0f2fe','ic'=>'#0284c7'],
-        ['label'=>'Revisi Survei',         'value'=>$stats['revisi_survei'],         'icon'=>'bi-arrow-clockwise',         'bg'=>'#fff7ed','ic'=>'#c2410c'],
-        ['label'=>'Menunggu Persetujuan',  'value'=>$stats['menunggu_persetujuan'],  'icon'=>'bi-person-check-fill',       'bg'=>'#f0fdf4','ic'=>'#16a34a'],
-        ['label'=>'Siap Disalurkan',       'value'=>$stats['siap_disalurkan'],       'icon'=>'bi-truck',                   'bg'=>'#dcfce7','ic'=>'#15803d'],
-        ['label'=>'Selesai',               'value'=>$stats['selesai'],               'icon'=>'bi-check-circle-fill',       'bg'=>'#d1fae5','ic'=>'#059669'],
-        ['label'=>'Ditolak',               'value'=>$stats['ditolak'],               'icon'=>'bi-x-circle-fill',           'bg'=>'#fee2e2','ic'=>'#dc2626'],
+@php
+use App\Models\Penerima;
+use App\Models\Pengajuan;
+use App\Models\Penyaluran;
+use App\Models\Survei;
+use App\Models\JenisBantuan;
+
+if (!isset($stats)) {
+    $stats = [
+        'total_penerima' => Penerima::count(),
+        'total_pengajuan' => Pengajuan::count(),
+        'menunggu_survei' => Pengajuan::where('status', 'menunggu_survei')->count(),
+        'menunggu_verifikasi' => Pengajuan::where('status', 'menunggu_verifikasi')->count(),
+        'revisi_survei' => Pengajuan::where('status', 'revisi_survei')->count(),
+        'menunggu_persetujuan' => Pengajuan::where('status', 'menunggu_persetujuan')->count(),
+        'siap_disalurkan' => Pengajuan::where('status', 'siap_disalurkan')->count(),
+        'selesai' => Pengajuan::where('status', 'selesai')->count(),
+        'ditolak' => Pengajuan::where('status', 'ditolak')->count(),
     ];
-    @endphp
+}
+
+if (!isset($chartData)) {
+    $months = collect(range(0,11))->map(fn($i) => now()->subMonths(11 - $i)->format('M Y'))->toArray();
+    $chartData = [
+        'labels' => $months,
+        'pengajuan' => array_fill(0, 12, 0),
+        'penyaluran' => array_fill(0, 12, 0),
+        'statusPengajuan' => ['labels' => [], 'data' => []],
+        'jenisBantuan' => ['labels' => [], 'data' => []],
+    ];
+}
+
+$cards = [
+    ['label' => 'Total Penerima',      'value' => $stats['total_penerima'] ?? 0,     'icon' => 'bi-people-fill',            'bg'=>'#dbeafe','ic'=>'#2563eb'],
+    ['label' => 'Total Pengajuan',      'value' => $stats['total_pengajuan'] ?? 0,     'icon' => 'bi-file-earmark-text-fill', 'bg'=>'#ede9fe','ic'=>'#7c3aed'],
+    ['label' => 'Menunggu Survei',      'value' => $stats['menunggu_survei'] ?? 0,     'icon' => 'bi-hourglass-split',        'bg'=>'#fef3c7','ic'=>'#d97706'],
+    ['label' => 'Menunggu Verifikasi',  'value' => $stats['menunggu_verifikasi'] ?? 0, 'icon' => 'bi-shield-exclamation',      'bg'=>'#e0f2fe','ic'=>'#0284c7'],
+    ['label' => 'Revisi Survei',        'value' => $stats['revisi_survei'] ?? 0,       'icon' => 'bi-arrow-clockwise',        'bg'=>'#fff7ed','ic'=>'#c2410c'],
+    ['label' => 'Menunggu Persetujuan', 'value' => $stats['menunggu_persetujuan'] ?? 0,'icon' => 'bi-person-check-fill',      'bg'=>'#f0fdf4','ic'=>'#16a34a'],
+    ['label' => 'Siap Disalurkan',      'value' => $stats['siap_disalurkan'] ?? 0,     'icon' => 'bi-truck',                  'bg'=>'#dcfce7','ic'=>'#15803d'],
+    ['label' => 'Selesai',              'value' => $stats['selesai'] ?? 0,             'icon' => 'bi-check-circle-fill',      'bg'=>'#d1fae5','ic'=>'#059669'],
+    ['label' => 'Ditolak',              'value' => $stats['ditolak'] ?? 0,             'icon' => 'bi-x-circle-fill',          'bg'=>'#fee2e2','ic'=>'#dc2626'],
+];
+@endphp
+
+<div class="row g-4 mb-5">
     @foreach($cards as $card)
-    <div class="col-6 col-md-4 col-xl-3">
-        <div class="stat-card">
-            <div class="stat-icon" style="background:{{ $card['bg'] }};color:{{ $card['ic'] }};">
-                <i class="bi {{ $card['icon'] }}"></i>
-            </div>
-            <div>
-                <div class="stat-value" style="color:{{ $card['ic'] }};">{{ number_format($card['value']) }}</div>
-                <div class="stat-label">{{ $card['label'] }}</div>
+    <div class="col-6 col-lg-3 col-xl-2.4">
+        <div class="card card-saas p-3 border-0">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background:{{ $card['bg'] }}; color:{{ $card['ic'] }};">
+                    <i class="bi {{ $card['icon'] }} fs-4"></i>
+                </div>
+                <div>
+                    <div class="text-muted small">{{ $card['label'] }}</div>
+                    <h3 class="fw-bold mb-0 text-dark">{{ number_format($card['value'] ?? 0) }}</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -182,7 +193,7 @@
 </div>
 @endsection
 
-@push('scripts')
+@push('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script>
 const COLORS = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899'];
