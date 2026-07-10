@@ -1,22 +1,59 @@
+# ==========================================
+# Stage 1 - Composer
+# ==========================================
+FROM composer:2 AS composer
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --no-interaction \
+    --no-scripts
+
+COPY . .
+
+RUN composer dump-autoload --optimize
+
+
+# ==========================================
+# Stage 2 - Node / Vite
+# ==========================================
+FROM node:22 AS node
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+
+# ==========================================
+# Stage 3 - Production
+# ==========================================
 FROM php:8.4-fpm
 
-# Install dependencies
+# Install packages
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
-    curl \
     unzip \
     zip \
-    nginx \
+    curl \
     supervisor \
-    nodejs \
-    npm \
+    libzip-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
-    libzip-dev \
-    libonig-dev \
-    libxml2-dev \
     libicu-dev \
+    libxml2-dev \
+    libonig-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP Extensions
@@ -26,45 +63,44 @@ RUN docker-php-ext-install \
     pdo \
     pdo_mysql \
     mysqli \
-    zip \
-    exif \
     bcmath \
+    exif \
     intl \
     pcntl \
+    zip \
     gd
-
-# Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Composer cache
-COPY composer.json composer.lock ./
-RUN composer install \
-    --no-dev \
-    --prefer-dist \
-    --optimize-autoloader \
-    --no-interaction
-
-# Node cache
-COPY package*.json ./
-RUN npm install
-
-# Copy source
+# Copy application
 COPY . .
 
-# Build Vite
-RUN npm run build
+# Copy vendor dari composer stage
+COPY --from=composer /app/vendor ./vendor
 
-# Laravel optimization
+# Copy Vite build
+COPY --from=node /app/public/build ./public/build
+
+# Permissions
+RUN mkdir -p storage/framework/cache \
+    storage/framework/views \
+    storage/framework/sessions \
+    storage/logs \
+    bootstrap/cache
+
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+RUN chmod -R 775 storage bootstrap/cache
+
+# Laravel optimize
+RUN php artisan package:discover --ansi
+
 RUN php artisan storage:link || true
-
-RUN chown -R www-data:www-data storage bootstrap/cache public/build
-RUN chmod -R 775 storage bootstrap/cache public/build
 
 COPY nginx.conf /etc/nginx/sites-available/default
 
 COPY start.sh /start.sh
+
 RUN chmod +x /start.sh
 
 EXPOSE 8080
