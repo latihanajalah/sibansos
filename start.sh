@@ -9,13 +9,10 @@ chown -R www-data:www-data /var/www/bootstrap/cache
 chmod -R 775 /var/www/storage
 chmod -R 775 /var/www/bootstrap/cache
 
-echo "Storage link..."
-php artisan storage:link || true
-
-echo "Migrating..."
+echo "Running migrations..."
 php artisan migrate --force || true
 
-echo "Optimizing..."
+echo "Optimizing Laravel..."
 php artisan optimize
 
 echo "Starting PHP-FPM..."
